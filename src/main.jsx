@@ -8,6 +8,7 @@ import {
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Products from './pages/Products';
+import AuthProvider from './Provider/AuthProvider';
 
 const router = createBrowserRouter([
   {
@@ -20,12 +21,14 @@ const router = createBrowserRouter([
   },
   {
     path: "/products",
-    element:<Products></Products>,
+    element: <Products></Products>,
   },
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 )

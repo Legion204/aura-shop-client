@@ -1,13 +1,27 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import useAuth from '../Hooks/useAuth';
 
 const Login = () => {
+    const { userLogin } = useAuth();
+    const navigate = useNavigate();
 
-    const handelLogin = e =>{
+    const handelLogin = e => {
         e.preventDefault()
         const email = e.target.email.value
         const password = e.target.password.value
-        console.log(email,password);
+
+        // user login
+        userLogin(email, password)
+            .then(() => {
+                alert('successful')
+                navigate('/products')
+            })
+            .catch(() => {
+                alert('error')
+            })
+
+        e.target.reset();
     }
 
     return (
@@ -15,7 +29,7 @@ const Login = () => {
             <div className="hero bg-base-200 min-h-screen">
                 <div className="hero-content flex-col lg:flex-row lg:gap-16">
                     <div className="text-center lg:text-left">
-                    <h1 className="text-5xl font-bold">Login To Your <span className='text-[#8338ec]'>Aura Shop</span> Account</h1>
+                        <h1 className="text-5xl font-bold">Login To Your <span className='text-[#8338ec]'>Aura Shop</span> Account</h1>
                         <p className="py-6">
                             We're glad to see you again. Please enter your details to continue shopping.
                         </p>

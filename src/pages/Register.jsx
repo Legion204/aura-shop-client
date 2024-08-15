@@ -1,15 +1,32 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import useAuth from '../Hooks/useAuth';
+import { updateProfile } from 'firebase/auth';
 
 const Register = () => {
 
-    const handelRegister = e =>{
+    const { userRegister, auth } = useAuth();
+    const navigate = useNavigate()
+
+    const handelRegister = e => {
         e.preventDefault()
         const name = e.target.name.value
         const email = e.target.email.value
         const password = e.target.password.value
-        console.log(name,email,password);
-    }
+
+        // user register
+        userRegister(email, password)
+            .then(() => {
+                alert('successful')
+                updateProfile(auth.currentUser, { displayName: name });
+                navigate('/products')
+            })
+            .catch(() => {
+                alert('error')
+            })
+
+        e.target.reset();
+    };
 
     return (
         <>
@@ -19,7 +36,7 @@ const Register = () => {
                         <h1 className="text-5xl font-bold">Create Your <span className='text-[#8338ec]'>Aura Shop</span> Account</h1>
                         <h1 className="text-3xl font-bold pt-6">Join our community and start shopping today!</h1>
                         <p className="py-6">
-                        Fill in the details to create your account and enjoy exclusive offers, personalized recommendations, and more.
+                            Fill in the details to create your account and enjoy exclusive offers, personalized recommendations, and more.
                         </p>
                         <p>Already have an account? <Link to={'/'} className='text-blue-500 underline'>Login</Link> to continue shopping.</p>
                     </div>
