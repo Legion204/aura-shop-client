@@ -37,7 +37,7 @@ const Products = () => {
     };
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/products?page=${page}&limit=8&search=${search}&category=${category}&minPrice=${range}&sortBy=${sortBy.sortBy}&order=${sortBy.order}`)
+        axios.get(`${import.meta.env.VITE_api_url}/products?page=${page}&limit=8&search=${search}&category=${category}&minPrice=${range}&sortBy=${sortBy.sortBy}&order=${sortBy.order}`)
             .then(data => {
                 setMetaData(data.data);
                 setProducts(data.data.products)
@@ -45,7 +45,7 @@ const Products = () => {
     }, [page, search, category, range, sortBy]);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/category`)
+        axios.get(`${import.meta.env.VITE_api_url}/category`)
             .then(data => {
                 setCategories(data.data);
             })
