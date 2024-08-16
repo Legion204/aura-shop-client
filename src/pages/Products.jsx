@@ -7,8 +7,10 @@ const Products = () => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
-    const [categories,setCategories]=useState([]);
-    const [category,setCategory]=useState("");
+    const [range, setRange] = useState()
+    console.log(range);
+    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState("");
     const [metaData, setMetaData] = useState({});
     console.log(category);
 
@@ -18,17 +20,17 @@ const Products = () => {
     };
 
     // function for category filter
-    const handelFilterByCategory=(e)=>{
+    const handelFilterByCategory = (e) => {
         setCategory(e.target.value);
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/products?page=${page}&search=${search}&category=${category}`)
+        axios.get(`http://localhost:5000/products?page=${page}&search=${search}&category=${category}&minPrice=${range}`)
             .then(data => {
                 setMetaData(data.data);
                 setProducts(data.data.products)
             })
-    }, [page, search,category]);
+    }, [page, search, category,range]);
 
     useEffect(() => {
         axios.get(`http://localhost:5000/category`)
@@ -41,7 +43,7 @@ const Products = () => {
         <>
             <NavBar></NavBar>
             <h1 className='text-5xl font-semibold text-center mb-10 underline'>Products</h1>
-            <div className=' flex gap-4 m-10'>
+            <div className=' flex gap-4 mt-10 mx-10 items-center'>
                 <label className="input input-bordered flex items-center gap-2">
                     <input onChange={({ currentTarget: input }) => { setPage(1), setSearch(input.value) }} type="text" className="grow" placeholder="Search" />
                     <svg
@@ -59,9 +61,19 @@ const Products = () => {
                     <option disabled selected>Category</option>
                     <option value={"all"}>All</option>
                     {
-                        categories?.map((p,i)=><option value={p?.name} key={i}>{p?.name}</option>)
+                        categories?.map((p, i) => <option value={p?.name} key={i}>{p?.name}</option>)
                     }
                 </select>
+                <label className="form-control w-full max-w-xs">
+                    <div className="label">
+                        <span className="text-xl font-bold">Price Range</span>
+                    </div>
+                    <input type="range" min={0} max="3000" onChange={({ currentTarget: input }) => { setPage(1), setRange(input.value) }} className="range" />
+                    <div className="label">
+                        <span className="text-lg font-semibold">0$</span>
+                        <span className="text-lg font-semibold">{range}$</span>
+                    </div>
+                </label>
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10'>
                 {
