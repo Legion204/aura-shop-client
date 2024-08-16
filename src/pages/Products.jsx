@@ -55,8 +55,8 @@ const Products = () => {
         <>
             <NavBar></NavBar>
             <h1 className='text-5xl font-semibold text-center mb-10 underline'>Products</h1>
-            <div className=' flex gap-4 mt-10 mx-10 items-center'>
-                <label className="input input-bordered flex items-center gap-2">
+            <div className=' flex flex-col md:flex-row gap-4 mb-10 md:mb-0 mt-10 mx-10 items-center'>
+                <label className="input input-bordered flex items-center w-full gap-2">
                     <input onChange={({ currentTarget: input }) => { setPage(1), setSearch(input.value) }} type="text" className="grow" placeholder="Search" />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
