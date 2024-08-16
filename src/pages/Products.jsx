@@ -5,24 +5,78 @@ import axios from 'axios';
 
 const Products = () => {
     const [products, setProducts] = useState([]);
+    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState("");
+    const [categories,setCategories]=useState([]);
+    const [category,setCategory]=useState("");
+    const [metaData, setMetaData] = useState({});
+    console.log(category);
+
+    // function for pagination
+    const onClick = (newPage) => {
+        setPage(newPage + 1)
+    };
+
+    // function for category filter
+    const handelFilterByCategory=(e)=>{
+        setCategory(e.target.value);
+    }
+
     useEffect(() => {
-        axios.get('products.json')
+        axios.get(`http://localhost:5000/products?page=${page}&search=${search}&category=${category}`)
             .then(data => {
-                setProducts(data.data)
+                setMetaData(data.data);
+                setProducts(data.data.products)
+            })
+    }, [page, search,category]);
+
+    useEffect(() => {
+        axios.get(`http://localhost:5000/category`)
+            .then(data => {
+                setCategories(data.data);
             })
     }, []);
-    console.log(products);
+
     return (
         <>
             <NavBar></NavBar>
             <h1 className='text-5xl font-semibold text-center mb-10 underline'>Products</h1>
+            <div className=' flex gap-4 m-10'>
+                <label className="input input-bordered flex items-center gap-2">
+                    <input onChange={({ currentTarget: input }) => { setPage(1), setSearch(input.value) }} type="text" className="grow" placeholder="Search" />
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        className="h-4 w-4 opacity-70">
+                        <path
+                            fillRule="evenodd"
+                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                            clipRule="evenodd" />
+                    </svg>
+                </label>
+                <select onChange={handelFilterByCategory} className="select select-bordered w-full max-w-xs">
+                    <option disabled selected>Category</option>
+                    <option value={"all"}>All</option>
+                    {
+                        categories?.map((p,i)=><option value={p?.name} key={i}>{p?.name}</option>)
+                    }
+                </select>
+            </div>
             <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10'>
                 {
-                    products.map((p,i)=><ProductCard 
-                    key={i}
-                    product={p}
+                    products?.map((p, i) => <ProductCard
+                        key={i}
+                        product={p}
                     ></ProductCard>)
                 }
+            </div>
+            <div className='flex justify-center m-10'>
+                <div className="join">
+                    {[...Array(metaData?.totalPages)].map((_, index) => (
+                        <button onClick={() => { onClick(index) }} key={index} className={`join-item btn ${page === index + 1 ? 'bg-blue-500 text-white' : ''}`} >{index + 1}</button>
+                    ))}
+                </div>
             </div>
         </>
     );
