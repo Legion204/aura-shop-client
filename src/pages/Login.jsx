@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../Hooks/useAuth';
+import { toast } from 'react-toastify';
 
 const Login = () => {
     const { userLogin } = useAuth();
@@ -14,11 +15,11 @@ const Login = () => {
         // user login
         userLogin(email, password)
             .then(() => {
-                alert('successful')
+                toast.success("Login successfully")
                 navigate('/products')
             })
             .catch(() => {
-                alert('error')
+                toast.error("Login filed")
             })
 
         e.target.reset();

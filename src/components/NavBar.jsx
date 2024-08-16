@@ -12,7 +12,7 @@ const NavBar = () => {
                 <div className="dropdown dropdown-end">
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                         <div className="w-10 rounded-full text-center bg-blue-500">
-                            <h1 className='text-xl p-1 text-white'>{user? user?.displayName.charAt(0): '?'}</h1>
+                            <h1 className='text-xl p-1 text-white'>{user? user?.displayName?.charAt(0): '?'}</h1>
                         </div>
                     </div>
                     <ul

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../Hooks/useAuth';
 import { updateProfile } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 const Register = () => {
 
@@ -17,12 +18,12 @@ const Register = () => {
         // user register
         userRegister(email, password)
             .then(() => {
-                alert('successful')
+                toast.success("Registration successfully")
                 updateProfile(auth.currentUser, { displayName: name });
                 navigate('/products')
             })
             .catch(() => {
-                alert('error')
+                toast.error("Registration filed")
             })
 
         e.target.reset();
