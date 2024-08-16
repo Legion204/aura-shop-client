@@ -7,10 +7,12 @@ const Products = () => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
-    const [range, setRange] = useState()
+    const [range, setRange] = useState(0)
     console.log(range);
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState("");
+    const [sortBy, setSortBy] = useState({});
+    console.log(sortBy);
     const [metaData, setMetaData] = useState({});
     console.log(category);
 
@@ -22,15 +24,27 @@ const Products = () => {
     // function for category filter
     const handelFilterByCategory = (e) => {
         setCategory(e.target.value);
-    }
+    };
+
+    // function for category filter
+    const handelSortBy = (e) => {
+        const sortBy="price"
+        if(e.target.value==="price-asc"){
+            setSortBy({sortBy:sortBy,order:"asc"})
+        }
+        if(e.target.value==="price-desc"){
+            setSortBy({sortBy:sortBy,order:"desc"})
+        }
+        
+    };
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/products?page=${page}&search=${search}&category=${category}&minPrice=${range}`)
+        axios.get(`http://localhost:5000/products?page=${page}&search=${search}&category=${category}&minPrice=${range}&sortBy=${sortBy.sortBy}&order=${sortBy.order}`)
             .then(data => {
                 setMetaData(data.data);
                 setProducts(data.data.products)
             })
-    }, [page, search, category,range]);
+    }, [page, search, category,range,sortBy]);
 
     useEffect(() => {
         axios.get(`http://localhost:5000/category`)
@@ -57,14 +71,14 @@ const Products = () => {
                             clipRule="evenodd" />
                     </svg>
                 </label>
-                <select onChange={handelFilterByCategory} className="select select-bordered w-full max-w-xs">
+                <select onChange={handelFilterByCategory} className="select select-bordered w-full">
                     <option disabled selected>Category</option>
                     <option value={"all"}>All</option>
                     {
                         categories?.map((p, i) => <option value={p?.name} key={i}>{p?.name}</option>)
                     }
                 </select>
-                <label className="form-control w-full max-w-xs">
+                <label className="form-control w-full">
                     <div className="label">
                         <span className="text-xl font-bold">Price Range</span>
                     </div>
@@ -74,6 +88,11 @@ const Products = () => {
                         <span className="text-lg font-semibold">{range}$</span>
                     </div>
                 </label>
+                <select onChange={handelSortBy} className="select select-bordered w-full">
+                    <option disabled selected>SortBy Price</option>
+                    <option value={"price-asc"}>Low to Hight</option>
+                    <option value={"price-desc"}>Hight to Low</option>
+                </select>
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10'>
                 {
