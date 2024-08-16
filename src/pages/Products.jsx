@@ -2,19 +2,17 @@ import React, { useEffect, useState } from 'react';
 import NavBar from '../components/NavBar';
 import ProductCard from '../components/ProductCard';
 import axios from 'axios';
+import Footer from '../components/Footer';
 
 const Products = () => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
     const [range, setRange] = useState(0)
-    console.log(range);
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState("");
     const [sortBy, setSortBy] = useState({});
-    console.log(sortBy);
     const [metaData, setMetaData] = useState({});
-    console.log(category);
 
     // function for pagination
     const onClick = (newPage) => {
@@ -28,23 +26,23 @@ const Products = () => {
 
     // function for category filter
     const handelSortBy = (e) => {
-        const sortBy="price"
-        if(e.target.value==="price-asc"){
-            setSortBy({sortBy:sortBy,order:"asc"})
+        const sortBy = "price"
+        if (e.target.value === "price-asc") {
+            setSortBy({ sortBy: sortBy, order: "asc" })
         }
-        if(e.target.value==="price-desc"){
-            setSortBy({sortBy:sortBy,order:"desc"})
+        if (e.target.value === "price-desc") {
+            setSortBy({ sortBy: sortBy, order: "desc" })
         }
-        
+
     };
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/products?page=${page}&search=${search}&category=${category}&minPrice=${range}&sortBy=${sortBy.sortBy}&order=${sortBy.order}`)
+        axios.get(`http://localhost:5000/products?page=${page}&limit=8&search=${search}&category=${category}&minPrice=${range}&sortBy=${sortBy.sortBy}&order=${sortBy.order}`)
             .then(data => {
                 setMetaData(data.data);
                 setProducts(data.data.products)
             })
-    }, [page, search, category,range,sortBy]);
+    }, [page, search, category, range, sortBy]);
 
     useEffect(() => {
         axios.get(`http://localhost:5000/category`)
@@ -109,6 +107,7 @@ const Products = () => {
                     ))}
                 </div>
             </div>
+            <Footer></Footer>
         </>
     );
 };
