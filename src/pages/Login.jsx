@@ -4,7 +4,7 @@ import useAuth from '../Hooks/useAuth';
 import { toast } from 'react-toastify';
 
 const Login = () => {
-    const { userLogin } = useAuth();
+    const { userLogin, signInGoogle } = useAuth();
     const navigate = useNavigate();
 
     const handelLogin = e => {
@@ -23,6 +23,17 @@ const Login = () => {
             })
 
         e.target.reset();
+    };
+
+    const handleGoogleLogin = () => {
+        signInGoogle()
+            .then((result) => {
+                navigate('/products');
+                toast.success("login successfully")
+            })
+            .catch(() => {
+                toast.error("Invalid credentials")
+            })
     }
 
     return (
@@ -53,6 +64,7 @@ const Login = () => {
                             <div className="form-control mt-6">
                                 <button type='submit' className="btn text-white bg-[#8338ec]">Login</button>
                             </div>
+                            <button onClick={handleGoogleLogin} className=' btn w-20 rounded-full p-2 text-white bg-[#8338ec]'>Google</button>
                         </form>
                     </div>
                 </div>
